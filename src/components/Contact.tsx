@@ -55,7 +55,7 @@ const Contact: React.FC = () => {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6"action="https://getform.io/f/bllyxqkb" method="POST">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Name

@@ -121,7 +121,7 @@ const Projects: React.FC = () => {
     if (!isPaused) {
       const timer = setInterval(() => {
         setCurrentIndex((prev) => (prev + 1) % projects.length);
-      }, 10000); // Auto-slide every 10 seconds
+      }, 40000); // Auto-slide every 10 seconds
       return () => clearInterval(timer);
     }
   }, [currentIndex, isPaused]);

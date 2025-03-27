@@ -46,91 +46,58 @@ const Contact: React.FC = () => {
 
             {/* Contact Form */}
             <form
-              action="https://getform.io/f/bllyxqkb"
-              method="POST"
-              className="space-y-6 bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md"
-            >
-              {/* Hidden Honeypot for Spam Prevention */}
-              <input type="hidden" name="_gotcha" style={{ display: "none" }} />
+  action="https://getform.io/f/bllyxqkb"
+  method="POST"
+  className="space-y-6 bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md"
+>
+  {/* Hidden Honeypot for Spam Prevention */}
+  <input type="hidden" name="_gotcha" style={{ display: "none" }} />
 
-              <div className="relative">
-                <input
-                  type="text"
-                  name="name"
-                  required
-                  className="peer w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 outline-none"
-                />
-                <label className="absolute left-4 top-3 text-gray-500 dark:text-gray-400 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-focus:top-1 peer-focus:text-indigo-600 peer-focus:text-sm">
-                  Name
-                </label>
-              </div>
+  <div className="relative">
+    <input
+      type="text"
+      name="name"
+      required
+      className="peer w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 outline-none"
+    />
+    <label className="absolute left-4 top-3 text-gray-500 dark:text-gray-400 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-focus:top-1 peer-focus:text-indigo-600 peer-focus:text-sm">
+      Name
+    </label>
+  </div>
 
-              <div className="relative">
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  className="peer w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 outline-none"
-                />
-                <label className="absolute left-4 top-3 text-gray-500 dark:text-gray-400 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-focus:top-1 peer-focus:text-indigo-600 peer-focus:text-sm">
-                  Email
-                </label>
-              </div>
+  <div className="relative">
+    <input
+      type="email"
+      name="email"
+      required
+      className="peer w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 outline-none"
+    />
+    <label className="absolute left-4 top-3 text-gray-500 dark:text-gray-400 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-focus:top-1 peer-focus:text-indigo-600 peer-focus:text-sm">
+      Email
+    </label>
+  </div>
 
-              <div className="relative">
-                <textarea
-                  name="message"
-                  required
-                  rows={4}
-                  className="peer w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 outline-none"
-                ></textarea>
-                <label className="absolute left-4 top-3 text-gray-500 dark:text-gray-400 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-focus:top-1 peer-focus:text-indigo-600 peer-focus:text-sm">
-                  Message
-                </label>
-              </div>
+  <div className="relative">
+    <textarea
+      name="message"
+      required
+      rows={4}
+      className="peer w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 outline-none"
+    ></textarea>
+    <label className="absolute left-4 top-3 text-gray-500 dark:text-gray-400 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-focus:top-1 peer-focus:text-indigo-600 peer-focus:text-sm">
+      Message
+    </label>
+  </div>
 
-              {/* Checkbox (Newsletter Subscription) */}
-              <div className="flex items-center">
-                <input type="hidden" name="subscribe" value="no" />
-                <input type="checkbox" name="subscribe" value="yes" defaultChecked className="mr-2" />
-                <label className="text-gray-600 dark:text-gray-300">Subscribe to Newsletter</label>
-              </div>
+  <button
+    type="submit"
+    className="w-full flex items-center justify-center px-6 py-3 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
+  >
+    Send Message
+    <Send className="ml-2 w-4 h-4" />
+  </button>
+</form>
 
-              {/* Radio Buttons (Gender Selection) */}
-              <div className="flex space-x-4">
-                <label className="flex items-center">
-                  <input type="radio" name="gender" value="male" defaultChecked className="mr-2" />
-                  <span className="text-gray-600 dark:text-gray-300">Male</span>
-                </label>
-                <label className="flex items-center">
-                  <input type="radio" name="gender" value="female" className="mr-2" />
-                  <span className="text-gray-600 dark:text-gray-300">Female</span>
-                </label>
-                <label className="flex items-center">
-                  <input type="radio" name="gender" value="other" className="mr-2" />
-                  <span className="text-gray-600 dark:text-gray-300">Other</span>
-                </label>
-              </div>
-
-              {/* Dropdown (Work Experience) */}
-              <div>
-                <label className="text-gray-600 dark:text-gray-300 block mb-1">Work Experience</label>
-                <select
-                  name="work-experience"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 outline-none"
-                >
-                  <option value="one-year">0-1 years</option>
-                  <option value="one-five-years">1-5 years</option>
-                </select>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full flex items-center justify-center px-6 py-3 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
-              >
-                Send Message <Send className="ml-2 w-4 h-4" />
-              </button>
-            </form>
           </div>
         </motion.div>
       </div>

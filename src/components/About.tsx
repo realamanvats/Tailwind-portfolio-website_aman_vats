@@ -365,16 +365,6 @@
 // export default About;
 
 
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -415,33 +405,40 @@ interface AboutProps {
 
 const About: React.FC<AboutProps> = ({ darkMode }) => {
   const [activeFeature, setActiveFeature] = useState(0);
-  const [activeRole, setActiveRole] = useState(0);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const timer = setInterval(() => {
       setActiveFeature((prev) => (prev + 1) % features.length);
     }, 4000);
     return () => clearInterval(timer);
   }, []);
 
-  // Theme classes based on dark mode
-  const themeClasses = darkMode 
-    ? {
-        bg: 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900',
-        text: 'text-white',
-        card: 'bg-white/5 backdrop-blur-sm border-white/10',
-        accent: 'from-purple-600 to-pink-600',
-        gradient: 'from-purple-500/10 to-pink-500/10',
-        textMuted: 'text-gray-300'
-      }
-    : {
-        bg: 'bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100',
-        text: 'text-gray-900',
-        card: 'bg-white/80 backdrop-blur-sm border-gray-200',
-        accent: 'from-blue-600 to-purple-600',
-        gradient: 'from-blue-500/10 to-purple-500/10',
-        textMuted: 'text-gray-600'
-      };
+  // Theme configuration
+  const getThemeClasses = () => {
+    if (!mounted) return { bg: '', text: '', card: '', textMuted: '' };
+    
+    return darkMode 
+      ? {
+          bg: 'bg-gradient-to-br from-slate-900 via-purple-900/50 to-slate-900',
+          text: 'text-white',
+          card: 'bg-white/5 backdrop-blur-sm border border-white/10',
+          textMuted: 'text-gray-300',
+          statsCard: 'bg-white/5 hover:bg-white/10',
+          gradient: 'from-purple-500/10 to-pink-500/10'
+        }
+      : {
+          bg: 'bg-gradient-to-br from-gray-50 via-blue-50/50 to-gray-100',
+          text: 'text-gray-900',
+          card: 'bg-white/80 backdrop-blur-sm border border-gray-200',
+          textMuted: 'text-gray-600',
+          statsCard: 'bg-white/60 hover:bg-white/80',
+          gradient: 'from-blue-500/10 to-purple-500/10'
+        };
+  };
+
+  const theme = getThemeClasses();
 
   // Based on your CV
   const features = [
@@ -550,14 +547,22 @@ const About: React.FC<AboutProps> = ({ darkMode }) => {
     { category: "Concepts", skills: ["DSA", "OOP", "DBMS", "Operating Systems"] }
   ];
 
+  if (!mounted) {
+    return <div className="min-h-screen bg-gray-100" />; // Fallback while mounting
+  }
+
   return (
-    <section id="about" className={`relative py-20 overflow-hidden ${themeClasses.bg} ${themeClasses.text} transition-colors duration-500`}>
+    <section id="about" className={`relative py-20 overflow-hidden min-h-screen transition-colors duration-500 ${theme.bg}`}>
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}
-            className={`absolute rounded-full bg-gradient-to-r ${darkMode ? 'from-purple-500/10 to-pink-500/10' : 'from-blue-500/10 to-purple-500/10'}`}
+            className={`absolute rounded-full ${
+              darkMode 
+                ? 'bg-gradient-to-r from-purple-500/10 to-pink-500/10' 
+                : 'bg-gradient-to-r from-blue-500/10 to-purple-500/10'
+            }`}
             style={{
               width: Math.random() * 100 + 50,
               height: Math.random() * 100 + 50,
@@ -588,19 +593,19 @@ const About: React.FC<AboutProps> = ({ darkMode }) => {
           className="text-center mb-16"
         >
           <motion.div
-            className={`inline-flex items-center px-6 py-3 rounded-full ${themeClasses.card} border mb-6`}
+            className={`inline-flex items-center px-6 py-3 rounded-full ${theme.card} mb-6`}
             whileHover={{ scale: 1.05 }}
           >
             <Sparkles className="w-5 h-5 text-purple-400 mr-2" />
             <span className="text-purple-400 font-mono text-sm">Behind The Code</span>
           </motion.div>
           
-          <h2 className="text-5xl sm:text-6xl font-bold mb-6">
+          <h2 className={`text-5xl sm:text-6xl font-bold mb-6 ${theme.text}`}>
             Crafting <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Digital Excellence</span>
           </h2>
           
           <motion.p
-            className={`text-xl ${themeClasses.textMuted} max-w-4xl mx-auto leading-relaxed`}
+            className={`text-xl ${theme.textMuted} max-w-4xl mx-auto leading-relaxed`}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
@@ -631,7 +636,7 @@ const About: React.FC<AboutProps> = ({ darkMode }) => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.5 }}
-                  className={`p-8 rounded-3xl backdrop-blur-sm border ${themeClasses.card} bg-gradient-to-br ${features[activeFeature].color}/10 relative overflow-hidden group`}
+                  className={`p-8 rounded-3xl backdrop-blur-sm ${theme.card} bg-gradient-to-br ${features[activeFeature].color}/10 relative overflow-hidden group`}
                 >
                   {/* Animated Background */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${features[activeFeature].color} opacity-5 group-hover:opacity-10 transition-opacity duration-500`} />
@@ -642,13 +647,13 @@ const About: React.FC<AboutProps> = ({ darkMode }) => {
                       {features[activeFeature].icon}
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold">{features[activeFeature].title}</h3>
+                      <h3 className={`text-2xl font-bold ${theme.text}`}>{features[activeFeature].title}</h3>
                       <p className="text-purple-400 font-semibold">{features[activeFeature].stats}</p>
                     </div>
                   </div>
 
                   {/* Description */}
-                  <p className={`${themeClasses.textMuted} text-lg leading-relaxed mb-6`}>
+                  <p className={`${theme.textMuted} text-lg leading-relaxed mb-6`}>
                     {features[activeFeature].description}
                   </p>
 
@@ -660,7 +665,7 @@ const About: React.FC<AboutProps> = ({ darkMode }) => {
                         initial={{ opacity: 0, scale: 0 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: index * 0.1 }}
-                        className={`px-4 py-2 ${themeClasses.card} rounded-full text-sm border backdrop-blur-sm`}
+                        className={`px-4 py-2 ${theme.card} rounded-full text-sm border backdrop-blur-sm ${theme.text}`}
                       >
                         {tech}
                       </motion.span>
@@ -676,7 +681,7 @@ const About: React.FC<AboutProps> = ({ darkMode }) => {
                         className={`w-3 h-3 rounded-full transition-all ${
                           index === activeFeature
                             ? `bg-gradient-to-r ${features[activeFeature].color} w-8`
-                            : "bg-gray-600 hover:bg-gray-500"
+                            : `${darkMode ? 'bg-gray-600' : 'bg-gray-400'} hover:bg-gray-500`
                         }`}
                       />
                     ))}
@@ -696,7 +701,7 @@ const About: React.FC<AboutProps> = ({ darkMode }) => {
               {stats.map((stat, index) => (
                 <motion.div
                   key={index}
-                  className={`p-4 rounded-2xl ${themeClasses.card} border text-center group hover:bg-white/10 transition-all duration-300`}
+                  className={`p-4 rounded-2xl ${theme.card} text-center group hover:${theme.statsCard} transition-all duration-300`}
                   whileHover={{ scale: 1.05, y: -5 }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -706,8 +711,8 @@ const About: React.FC<AboutProps> = ({ darkMode }) => {
                   <div className="text-purple-400 mb-2 flex justify-center">
                     {stat.icon}
                   </div>
-                  <div className="text-2xl font-bold mb-1">{stat.value}</div>
-                  <div className={`text-sm ${themeClasses.textMuted}`}>{stat.label}</div>
+                  <div className={`text-2xl font-bold mb-1 ${theme.text}`}>{stat.value}</div>
+                  <div className={`text-sm ${theme.textMuted}`}>{stat.label}</div>
                 </motion.div>
               ))}
             </motion.div>
@@ -718,18 +723,18 @@ const About: React.FC<AboutProps> = ({ darkMode }) => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
               viewport={{ once: true }}
-              className={`p-8 rounded-3xl backdrop-blur-sm border ${themeClasses.card}`}
+              className={`p-8 rounded-3xl backdrop-blur-sm ${theme.card}`}
             >
               <div className="flex items-center space-x-3 mb-6">
                 <Award className="w-8 h-8 text-purple-400" />
-                <h3 className="text-2xl font-bold">Roles & Positions</h3>
+                <h3 className={`text-2xl font-bold ${theme.text}`}>Roles & Positions</h3>
               </div>
               
               <div className="space-y-6">
                 {roles.map((role, index) => (
                   <motion.div
                     key={index}
-                    className={`p-6 rounded-2xl ${themeClasses.card} border hover:border-purple-400/50 transition-all duration-300 group`}
+                    className={`p-6 rounded-2xl ${theme.card} hover:border-purple-400/50 transition-all duration-300 group`}
                     whileHover={{ scale: 1.02 }}
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
@@ -741,11 +746,11 @@ const About: React.FC<AboutProps> = ({ darkMode }) => {
                         {role.icon}
                       </div>
                       <div className="flex-1">
-                        <h4 className="text-xl font-bold group-hover:text-purple-300 transition-colors">
+                        <h4 className={`text-xl font-bold group-hover:text-purple-300 transition-colors ${theme.text}`}>
                           {role.title}
                         </h4>
                         <p className="text-purple-400 font-semibold">{role.company}</p>
-                        <div className="flex items-center space-x-4 mt-2 text-sm text-gray-400">
+                        <div className={`flex items-center space-x-4 mt-2 text-sm ${theme.textMuted}`}>
                           <div className="flex items-center">
                             <Calendar className="w-4 h-4 mr-1" />
                             {role.period}
@@ -757,7 +762,7 @@ const About: React.FC<AboutProps> = ({ darkMode }) => {
                         </div>
                         <ul className="mt-3 space-y-1">
                           {role.achievements.map((achievement, i) => (
-                            <li key={i} className="flex items-start text-sm text-gray-400">
+                            <li key={i} className={`flex items-start text-sm ${theme.textMuted}`}>
                               <span className="text-purple-400 mr-2 mt-1">•</span>
                               {achievement}
                             </li>
@@ -779,35 +784,35 @@ const About: React.FC<AboutProps> = ({ darkMode }) => {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className={`p-8 rounded-3xl backdrop-blur-sm border ${themeClasses.card} bg-gradient-to-br from-purple-500/10 to-pink-500/10`}
+              className={`p-8 rounded-3xl backdrop-blur-sm ${theme.card} bg-gradient-to-br ${theme.gradient}`}
             >
               <div className="flex items-center space-x-3 mb-6">
                 <Rocket className="w-8 h-8 text-purple-400" />
-                <h3 className="text-2xl font-bold">Current Focus</h3>
+                <h3 className={`text-2xl font-bold ${theme.text}`}>Current Focus</h3>
               </div>
               
               <div className="space-y-4">
-                <div className={`flex items-center space-x-3 p-4 rounded-2xl ${themeClasses.card} hover:bg-white/10 transition-all duration-300 group`}>
+                <div className={`flex items-center space-x-3 p-4 rounded-2xl ${theme.card} hover:${theme.statsCard} transition-all duration-300 group`}>
                   <BookOpen className="w-6 h-6 text-green-400" />
                   <div>
-                    <h4 className="font-semibold">PwC CTDP 3.0 Training</h4>
-                    <p className={`text-sm ${themeClasses.textMuted}`}>Advanced Salesforce & Consulting Skills</p>
+                    <h4 className={`font-semibold ${theme.text}`}>PwC CTDP 3.0 Training</h4>
+                    <p className={`text-sm ${theme.textMuted}`}>Advanced Salesforce & Consulting Skills</p>
                   </div>
                 </div>
                 
-                <div className={`flex items-center space-x-3 p-4 rounded-2xl ${themeClasses.card} hover:bg-white/10 transition-all duration-300 group`}>
+                <div className={`flex items-center space-x-3 p-4 rounded-2xl ${theme.card} hover:${theme.statsCard} transition-all duration-300 group`}>
                   <Code className="w-6 h-6 text-blue-400" />
                   <div>
-                    <h4 className="font-semibold">Full Stack Development</h4>
-                    <p className={`text-sm ${themeClasses.textMuted}`}>React, Node.js & Modern Web Technologies</p>
+                    <h4 className={`font-semibold ${theme.text}`}>Full Stack Development</h4>
+                    <p className={`text-sm ${theme.textMuted}`}>React, Node.js & Modern Web Technologies</p>
                   </div>
                 </div>
                 
-                <div className={`flex items-center space-x-3 p-4 rounded-2xl ${themeClasses.card} hover:bg-white/10 transition-all duration-300 group`}>
+                <div className={`flex items-center space-x-3 p-4 rounded-2xl ${theme.card} hover:${theme.statsCard} transition-all duration-300 group`}>
                   <Target className="w-6 h-6 text-orange-400" />
                   <div>
-                    <h4 className="font-semibold">Competitive Programming</h4>
-                    <p className={`text-sm ${themeClasses.textMuted}`}>DSA & Problem Solving Excellence</p>
+                    <h4 className={`font-semibold ${theme.text}`}>Competitive Programming</h4>
+                    <p className={`text-sm ${theme.textMuted}`}>DSA & Problem Solving Excellence</p>
                   </div>
                 </div>
               </div>
@@ -819,11 +824,11 @@ const About: React.FC<AboutProps> = ({ darkMode }) => {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
-              className={`p-8 rounded-3xl backdrop-blur-sm border ${themeClasses.card}`}
+              className={`p-8 rounded-3xl backdrop-blur-sm ${theme.card}`}
             >
               <div className="flex items-center space-x-3 mb-6">
                 <Languages className="w-8 h-8 text-cyan-400" />
-                <h3 className="text-2xl font-bold">Languages</h3>
+                <h3 className={`text-2xl font-bold ${theme.text}`}>Languages</h3>
               </div>
               
               <div className="space-y-4">
@@ -837,10 +842,10 @@ const About: React.FC<AboutProps> = ({ darkMode }) => {
                     viewport={{ once: true }}
                   >
                     <div className="flex justify-between items-center">
-                      <span className="font-semibold">{lang.language}</span>
-                      <span className={`text-sm ${themeClasses.textMuted}`}>{lang.level}</span>
+                      <span className={`font-semibold ${theme.text}`}>{lang.language}</span>
+                      <span className={`text-sm ${theme.textMuted}`}>{lang.level}</span>
                     </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2">
+                    <div className={`w-full ${darkMode ? 'bg-gray-700' : 'bg-gray-300'} rounded-full h-2`}>
                       <motion.div
                         className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"
                         initial={{ width: 0 }}
@@ -860,11 +865,11 @@ const About: React.FC<AboutProps> = ({ darkMode }) => {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
               viewport={{ once: true }}
-              className={`p-8 rounded-3xl backdrop-blur-sm border ${themeClasses.card}`}
+              className={`p-8 rounded-3xl backdrop-blur-sm ${theme.card}`}
             >
               <div className="flex items-center space-x-3 mb-6">
                 <Cpu className="w-8 h-8 text-purple-400" />
-                <h3 className="text-2xl font-bold">Technical Skills</h3>
+                <h3 className={`text-2xl font-bold ${theme.text}`}>Technical Skills</h3>
               </div>
               
               <div className="space-y-4">
@@ -876,12 +881,12 @@ const About: React.FC<AboutProps> = ({ darkMode }) => {
                     transition={{ duration: 0.4, delay: index * 0.1 }}
                     viewport={{ once: true }}
                   >
-                    <h4 className="font-semibold text-purple-400 mb-2">{skillGroup.category}</h4>
+                    <h4 className={`font-semibold text-purple-400 mb-2 ${theme.text}`}>{skillGroup.category}</h4>
                     <div className="flex flex-wrap gap-2">
                       {skillGroup.skills.map((skill, skillIndex) => (
                         <motion.span
                           key={skillIndex}
-                          className={`px-3 py-1 ${themeClasses.card} rounded-full text-sm border backdrop-blur-sm`}
+                          className={`px-3 py-1 ${theme.card} rounded-full text-sm border backdrop-blur-sm ${theme.text}`}
                           whileHover={{ scale: 1.05 }}
                         >
                           {skill}
@@ -900,3 +905,4 @@ const About: React.FC<AboutProps> = ({ darkMode }) => {
 };
 
 export default About;
+

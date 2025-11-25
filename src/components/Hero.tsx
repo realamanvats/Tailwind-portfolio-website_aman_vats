@@ -800,4 +800,4 @@ const ProjectCard = ({ project, index }) => (
   </motion.div>
 );
 
-export default Hero;
+export default Home;
